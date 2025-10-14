@@ -13,18 +13,10 @@ La estación de tierra los recibe y los muestra en una **gráfica dinámica** en
 - **interfaz_grafica.py** → Interfaz con gráfica incrustada y control Start/Stop.
 - **README.md** → Este documento.
 
-## ▶️ Cómo ejecutarlo
-1. **Sube** los códigos a los Arduinos.
-2. **Ejecuta** `python interfaz_grafica.py`.
-3. Verás los valores de temperatura y humedad en una gráfica en tiempo real.
-4. El botón **Start/Stop** permite pausar o reanudar la lectura.
-
 ## 🚨 Alarmas
 - Si el sensor no funciona → el Arduino satélite envía un mensaje de error.
 - Si no hay comunicación → la interfaz muestra un aviso en pantalla.
 
 ## 🧪 Video demostración
-[Enlace al vídeo (máx. 5 minutos)](https://...)
 
-## 🏷️ Versión
-Tag en GitHub: `v1.0`
+
