@@ -39,16 +39,16 @@ ser = None
 mySerial = None      
 root = None         
 threadRecepcion = None 
+mode = "T"  # "T" (temperatura) o "H" (humedad)
 
 def main():
-    global ser, mySerial, root, threadRecepcion
+    global ser, mySerial, root, threadRecepcion, mode
 
     device = elegir_puerto(PUERTO_DESEADO)
     ser = abrir_serial(device)
     mySerial = ser  
     print(f"Conectado a {device}. Esperando datos del Arduino...")
 
-   
     plt.ion()
     fig, ax = plt.subplots()
     ax.set_title("Temperatura y Humedad en tiempo real")
@@ -65,7 +65,6 @@ def main():
 
     proximo_ping = time.monotonic() + 1.0
 
-
     def recepcion():
         nonlocal contador, proximo_ping
         try:
@@ -78,7 +77,6 @@ def main():
                         linea = ""
                     if linea:
                         print(linea)  
-                    
                         m = patron.search(linea)
                         if m:
                             t = float(m.group(1))
@@ -88,13 +86,19 @@ def main():
                             tiempos.append(contador)
                             contador += 1
 
+                            # --- DIBUJO SEGÚN MENÚ (T o H) ---
                             ax.clear()
-                            ax.plot(tiempos, temperaturas, label="Temperatura (°C)")
-                            ax.plot(tiempos, humedades, label="Humedad (%)")
-                            ax.set_ylim(0, 100)
+                            if mode == "T":
+                                ax.plot(tiempos, temperaturas, label="Temperatura (°C)")
+                                ax.set_title("Temperatura en tiempo real")
+                                ax.set_ylabel("Temperatura (°C)")
+                            else:
+                                ax.plot(tiempos, humedades, label="Humedad (%)")
+                                ax.set_title("Humedad en tiempo real")
+                                ax.set_ylabel("Humedad (%)")
+                                ax.set_ylim(0, 100)
+
                             ax.set_xlabel("Muestras")
-                            ax.set_ylabel("Valores")
-                            ax.set_title("Temperatura y Humedad en tiempo real")
                             ax.legend(loc="upper right")
                             plt.pause(0.01)
 
@@ -120,8 +124,21 @@ def main():
     root = tk.Tk()
     root.title("Iniciar / Parar / Reanudar (Paso 11)")
 
+    # --- MENÚ SENCILLO PARA ELEGIR GRÁFICA ---
+    menubar = tk.Menu(root)
+    menu_graf = tk.Menu(menubar, tearoff=0)
+    def graf_t():
+        global mode
+        mode = "T"
+    def graf_h():
+        global mode
+        mode = "H"
+    menu_graf.add_command(label="Gràfica T", command=graf_t)
+    menu_graf.add_command(label="Gràfica H", command=graf_h)
+    menubar.add_cascade(label="Gràfiques", menu=menu_graf)
+    root.config(menu=menubar)
+
     def on_iniciar():
-    
         global threadRecepcion
         if threadRecepcion and threadRecepcion.is_alive():
             return
