@@ -1,4 +1,4 @@
-# -- coding: utf-8 --
+# -*- coding: utf-8 -*-
 import threading
 import time
 import re
@@ -47,7 +47,7 @@ def abrir_serial(device: str) -> serial.Serial:
 
 # ---------- Aplicación ----------
 class EstacionGUI:
-    def _init_(self, root: tk.Tk):
+    def __init__(self, root: tk.Tk):
         self.root = root
         self.root.title("Estación de Tierra — Sistema Satelital")
         self.root.minsize(860, 560)
@@ -257,5 +257,5 @@ def main():
     EstacionGUI(root)
     root.mainloop()
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     main()
