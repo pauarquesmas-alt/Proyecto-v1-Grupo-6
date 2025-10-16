@@ -1,27 +1,38 @@
+# -- coding: utf-8 --
+import threading
 import time
 import re
 from collections import deque
 
 import serial
 import serial.tools.list_ports
-import matplotlib.pyplot as plt
-import threading
+
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-PUERTO_DESEADO = "COM4"
+# ===== Parámetros de serie =====
+PUERTO_DESEADO = "COM9"      # Ajusta según tu equipo
 BAUDRATE = 9600
 TIMEOUT_S = 1.0
 
+# ===== Parámetros de visualización =====
+N_MUESTRAS = 120
+REFRESH_MS = 100
+PATRON_TH = re.compile(r"T:(-?\d+(?:\.\d+)?).*H:(-?\d+(?:\.\d+)?)")
+
+# ---------- Utilidades de puerto ----------
 def elegir_puerto(deseado: str | None = None) -> str:
     disponibles = [p.device for p in serial.tools.list_ports.comports()]
-    print("Puertos disponibles:", disponibles)
+    print("[INFO] Puertos disponibles:", disponibles)
     if deseado and deseado in disponibles:
         return deseado
     if not disponibles:
         raise RuntimeError("No hay puertos serie disponibles.")
-    print(f"Aviso: {deseado} no encontrado. Usando {disponibles[0]}")
+    if deseado and deseado not in disponibles:
+        print(f"[AVISO] {deseado} no encontrado. Usando {disponibles[0]}")
     return disponibles[0]
 
 def abrir_serial(device: str) -> serial.Serial:
@@ -34,145 +45,217 @@ def abrir_serial(device: str) -> serial.Serial:
     except serial.SerialException as e:
         raise RuntimeError(f"No se pudo abrir {device}: {e}")
 
+# ---------- Aplicación ----------
+class EstacionGUI:
+    def _init_(self, root: tk.Tk):
+        self.root = root
+        self.root.title("Estación de Tierra — Sistema Satelital")
+        self.root.minsize(860, 560)
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
-ser = None           
-mySerial = None      
-root = None         
-threadRecepcion = None 
-mode = "T"  # "T" (temperatura) o "H" (humedad)
+        style = ttk.Style()
+        style.theme_use("clam")
+        style.configure("Header.TLabel", font=("Segoe UI", 20, "italic"))
+        style.configure("TButton", padding=8)
 
-def main():
-    global ser, mySerial, root, threadRecepcion, mode
+        # Estado
+        self.ser = None
+        self.hilo_rx = None
+        self.rx_activa = threading.Event()
+        self.conectado = False
 
-    device = elegir_puerto(PUERTO_DESEADO)
-    ser = abrir_serial(device)
-    mySerial = ser  
-    print(f"Conectado a {device}. Esperando datos del Arduino...")
+        self.tiempos = deque(maxlen=N_MUESTRAS)
+        self.temperaturas = deque(maxlen=N_MUESTRAS)
+        self.humedades = deque(maxlen=N_MUESTRAS)
+        self.contador = 0
 
-    plt.ion()
-    fig, ax = plt.subplots()
-    ax.set_title("Temperatura y Humedad en tiempo real")
-    ax.set_xlabel("Muestras")
-    ax.set_ylabel("Valores")
+        # ---------- Layout principal ----------
+        self.root.grid_rowconfigure(1, weight=1)
+        self.root.grid_columnconfigure(0, weight=1)
 
-    N = 50
-    temperaturas = deque(maxlen=N)
-    humedades = deque(maxlen=N)
-    tiempos = deque(maxlen=N)
+        # Cabecera (sin subtítulo)
+        header = ttk.Frame(self.root, padding=(12, 10))
+        header.grid(row=0, column=0, columnspan=2, sticky="nsew")
+        header.columnconfigure(0, weight=1)
+        ttk.Label(header, text="Estación de Tierra", style="Header.TLabel").grid(row=0, column=0, sticky="w")
 
-    patron = re.compile(r"T:(-?\d+(?:\.\d+)?).*H:(-?\d+(?:\.\d+)?)")
-    contador = 0
+        # Cuerpo: plots + barra lateral
+        body = ttk.Frame(self.root, padding=10)
+        body.grid(row=1, column=0, columnspan=2, sticky="nsew")
+        body.grid_columnconfigure(0, weight=1)
+        body.grid_rowconfigure(0, weight=1)
 
-    proximo_ping = time.monotonic() + 1.0
+        panel_plots = ttk.Frame(body)
+        panel_plots.grid(row=0, column=0, sticky="nsew", padx=(0, 10))
+        panel_plots.grid_rowconfigure(0, weight=1)
+        panel_plots.grid_columnconfigure(0, weight=1)
 
-    def recepcion():
-        nonlocal contador, proximo_ping
+        sidebar = ttk.Frame(body, width=160)
+        sidebar.grid(row=0, column=1, sticky="ns")
+        for r in range(5):
+            sidebar.grid_rowconfigure(r, weight=0)
+        sidebar.grid_rowconfigure(6, weight=1)
+
+        # Botones
+        self.btn_iniciar = ttk.Button(sidebar, text="Iniciar", command=self.on_iniciar)
+        self.btn_parar   = ttk.Button(sidebar, text="Parar", command=self.on_parar, state="disabled")
+        self.btn_rean    = ttk.Button(sidebar, text="Reanudar", command=self.on_reanudar, state="disabled")
+        self.btn_iniciar.grid(row=0, column=0, sticky="ew", pady=(0, 8))
+        self.btn_parar.grid(row=1, column=0, sticky="ew", pady=8)
+        self.btn_rean.grid(row=2, column=0, sticky="ew", pady=8)
+
+        ttk.Separator(sidebar, orient="horizontal").grid(row=3, column=0, sticky="ew", pady=12)
+        self.lbl_estado = ttk.Label(sidebar, text="Puerto: —\nMuestras: 0\nÚltima T/H: —/—", justify="left")
+        self.lbl_estado.grid(row=4, column=0, sticky="ew")
+
+        # Figura con dos subgráficas — sin solapes
+        self.fig = Figure(figsize=(7, 5), dpi=100, constrained_layout=True)
+        self.axT = self.fig.add_subplot(2, 1, 1)
+        self.axH = self.fig.add_subplot(2, 1, 2)
+
+        self.axT.set_title("Temperatura (°C) — tiempo real")
+        self.axT.set_ylabel("°C")
+        self.axT.grid(True, linestyle=":", linewidth=0.8, alpha=0.6)
+        # Importante: sin etiqueta X en el gráfico superior para no pisar el título inferior
+        self.axT.set_xlabel("")
+
+        self.axH.set_title("Humedad (%) — tiempo real")
+        self.axH.set_xlabel("Muestras")   # solo aquí
+        self.axH.set_ylabel("%")
+        self.axH.set_ylim(0, 100)
+        self.axH.grid(True, linestyle=":", linewidth=0.8, alpha=0.6)
+
+        # Por si tu backend no respeta constrained_layout
+        self.fig.subplots_adjust(hspace=0.35, bottom=0.08, top=0.95)
+
+        self.lineT, = self.axT.plot([], [], lw=1.8, label="T")
+        self.lineH, = self.axH.plot([], [], lw=1.8, label="H")
+        self.axT.legend(loc="upper right")
+        self.axH.legend(loc="upper right")
+
+        self.canvas = FigureCanvasTkAgg(self.fig, master=panel_plots)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().grid(row=0, column=0, sticky="nsew")
+
+        # (Eliminada la barra de estado inferior)
+
+        # Refresco periódico
+        self.root.after(REFRESH_MS, self.actualizar_graficas)
+
+    # ---------- Callbacks ----------
+    def on_iniciar(self):
+        if self.hilo_rx and self.hilo_rx.is_alive():
+            return
         try:
-            while True:
-                if mySerial.in_waiting > 0:
-                    try:
-                        linea = mySerial.readline().decode('utf-8').rstrip()
-                    except Exception as e:
-                        print(f"[Decodificación] {e}")
-                        linea = ""
+            device = elegir_puerto(PUERTO_DESEADO)
+            self.ser = abrir_serial(device)
+            self.conectado = True
+            self.lbl_estado.config(text=f"Puerto: {device}\nMuestras: 0\nÚltima T/H: —/—")
+        except Exception as e:
+            messagebox.showerror("Conexión", str(e))
+            return
+
+        self.tiempos.clear(); self.temperaturas.clear(); self.humedades.clear()
+        self.contador = 0
+
+        self.rx_activa.set()
+        self.hilo_rx = threading.Thread(target=self.recepcion, daemon=True)
+        self.hilo_rx.start()
+
+        self.btn_iniciar.config(state="disabled")
+        self.btn_parar.config(state="normal")
+        self.btn_rean.config(state="normal")
+
+    def on_parar(self):
+        if not self.conectado: return
+        try:
+            self.ser.write(b"Parar")
+        except Exception as e:
+            messagebox.showerror("Envío", f"No se pudo enviar 'Parar': {e}")
+
+    def on_reanudar(self):
+        if not self.conectado: return
+        try:
+            self.ser.write(b"Reanudar")
+        except Exception as e:
+            messagebox.showerror("Envío", f"No se pudo enviar 'Reanudar': {e}")
+
+    # ---------- Hilo de recepción ----------
+    def recepcion(self):
+        proximo_ping = time.monotonic() + 1.0
+        while self.rx_activa.is_set():
+            try:
+                if self.ser.in_waiting > 0:
+                    linea = self.ser.readline().decode('utf-8', errors='replace').strip()
                     if linea:
-                        print(linea)  
-                        m = patron.search(linea)
+                        m = PATRON_TH.search(linea)
                         if m:
-                            t = float(m.group(1))
-                            h = float(m.group(2))
-                            temperaturas.append(t)
-                            humedades.append(h)
-                            tiempos.append(contador)
-                            contador += 1
+                            t = float(m.group(1)); h = float(m.group(2))
+                            self.contador += 1
+                            self.tiempos.append(self.contador)
+                            self.temperaturas.append(t)
+                            self.humedades.append(h)
+                            self.lbl_estado.config(
+                                text=f"Puerto: {self.ser.port}\nMuestras: {self.contador}\nÚltima T/H: {t:.1f} / {h:.1f}"
+                            )
+                        else:
+                            print("[RX]", linea)
 
-                            # --- DIBUJO SEGÚN MENÚ (T o H) ---
-                            ax.clear()
-                            if mode == "T":
-                                ax.plot(tiempos, temperaturas, label="Temperatura (°C)")
-                                ax.set_title("Temperatura en tiempo real")
-                                ax.set_ylabel("Temperatura (°C)")
-                            else:
-                                ax.plot(tiempos, humedades, label="Humedad (%)")
-                                ax.set_title("Humedad en tiempo real")
-                                ax.set_ylabel("Humedad (%)")
-                                ax.set_ylim(0, 100)
-
-                            ax.set_xlabel("Muestras")
-                            ax.legend(loc="upper right")
-                            plt.pause(0.01)
-
-                # Tu ping periódico
                 ahora = time.monotonic()
                 if ahora >= proximo_ping:
                     try:
-                        mySerial.write(b"P")
+                        self.ser.write(b"P")
                     except serial.SerialException as e:
-                        print(f"[Escritura] {e}")
-                        break
+                        print("[ERROR TX]", e); break
                     proximo_ping = ahora + 1.0
 
                 time.sleep(0.01)
 
-        except KeyboardInterrupt:
-            print("\nPrograma terminado por el usuario (hilo).")
-        except serial.SerialException as e:
-            print(f"Error de puerto serie (hilo): {e}")
-        except Exception as e:
-            print(f"Ocurrió un error inesperado (hilo): {e}")
+            except serial.SerialException as e:
+                print("[ERROR SERIE]", e)
+                break
+            except Exception as e:
+                print("[ERROR]", e)
+                time.sleep(0.1)
 
+        print("[INFO] Recepción detenida.")
+
+    # ---------- Refresco de gráficas ----------
+    def actualizar_graficas(self):
+        self.lineT.set_data(self.tiempos, self.temperaturas)
+        self.lineH.set_data(self.tiempos, self.humedades)
+
+        if self.tiempos:
+            x0 = max(0, self.tiempos[0]-1); x1 = self.tiempos[-1]+1
+            self.axT.set_xlim(x0, x1); self.axH.set_xlim(x0, x1)
+
+            tmin = min(self.temperaturas); tmax = max(self.temperaturas)
+            margen = max(0.5, (tmax - tmin) * 0.15)
+            self.axT.set_ylim(tmin - margen, tmax + margen)
+
+        self.canvas.draw_idle()
+        self.root.after(REFRESH_MS, self.actualizar_graficas)
+
+    # ---------- Cierre ----------
+    def on_close(self):
+        self.rx_activa.clear()
+        try:
+            if self.hilo_rx and self.hilo_rx.is_alive():
+                self.hilo_rx.join(timeout=1.0)
+        except Exception:
+            pass
+        try:
+            if self.ser and self.ser.is_open:
+                self.ser.close()
+        except Exception:
+            pass
+        self.root.destroy()
+
+# ---------- main ----------
+def main():
     root = tk.Tk()
-    root.title("Iniciar / Parar / Reanudar (Paso 11)")
-
-    # --- MENÚ SENCILLO PARA ELEGIR GRÁFICA ---
-    menubar = tk.Menu(root)
-    menu_graf = tk.Menu(menubar, tearoff=0)
-    def graf_t():
-        global mode
-        mode = "T"
-    def graf_h():
-        global mode
-        mode = "H"
-    menu_graf.add_command(label="Gràfica T", command=graf_t)
-    menu_graf.add_command(label="Gràfica H", command=graf_h)
-    menubar.add_cascade(label="Gràfiques", menu=menu_graf)
-    root.config(menu=menubar)
-
-    def on_iniciar():
-        global threadRecepcion
-        if threadRecepcion and threadRecepcion.is_alive():
-            return
-        threadRecepcion = threading.Thread(target=recepcion, daemon=True)
-        threadRecepcion.start()
-
-    def on_parar():
-        try:
-            mensaje = "Parar"
-            mySerial.write(mensaje.encode('utf-8'))
-            print("Enviado:", mensaje)
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo enviar 'Parar': {e}")
-
-    def on_reanudar():
-        try:
-            mensaje = "Reanudar"
-            mySerial.write(mensaje.encode('utf-8'))
-            print("Enviado:", mensaje)
-        except Exception as e:
-            messagebox.showerror("Error", f"No se pudo enviar 'Reanudar': {e}")
-
-    frame = tk.Frame(root)
-    frame.pack(padx=8, pady=8)
-
-    tk.Button(frame, text="Iniciar",  width=12, command=on_iniciar).grid(row=0, column=0, padx=4)
-    tk.Button(frame, text="Parar",    width=12, command=on_parar).grid(row=0, column=1, padx=4)
-    tk.Button(frame, text="Reanudar", width=12, command=on_reanudar).grid(row=0, column=2, padx=4)
-
-    lbl = tk.Label(root, text="Pulsa Iniciar para empezar a recibir.\nParar/Reanudar envían esa palabra al satélite.")
-    lbl.pack(pady=6)
-
+    EstacionGUI(root)
     root.mainloop()
 
-
-if __name__ == "__main__":
+if _name_ == "_main_":
     main()
