@@ -8,5 +8,5 @@ El satélite mide **temperatura y humedad** y envía los datos por serie.
 La estación de tierra los recibe y los muestra en una **gráfica dinámica** en una interfaz Python.
 
 ## 🧪 Video demostración
-
+https://youtu.be/2IQpUfR1IhA
 
