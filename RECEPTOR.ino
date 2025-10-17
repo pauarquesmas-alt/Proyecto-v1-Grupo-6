@@ -1,22 +1,22 @@
 #include <SoftwareSerial.h>
 
-#define LED_PIN 13                 // LED de confirmació per comanda des del PC
+#define LED_PIN 13                 
 #define LED_ALARMA_SENSOR 6        // S'encén si el satèl·lit envia "Fallo"
 #define LED_ALARMA_COMS 7          // S'encén si portem >5s sense rebre res
 #define BLINK_DURATION_MS 100
 #define BAUDRATE 9600
 
-// Enllaç amb el satèl·lit (Arduino satèl·lit)
+// Enllaç amb el satèl·lit (Arduino satel·lit)
 SoftwareSerial EmisorSerial(10, 11); // RX=10 (rep del sat), TX=11 (envia al sat)
 
 int isBlinking = 0;
 unsigned long lastBlinkTime = 0;
 
-// Temporitzador de comunicació: últim cop que va arribar qualsevol byte
+// Temporitzador de comunicació
 unsigned long lastRxMillis = 0;
 const unsigned long TIMEOUT_COMS_MS = 5000;
 
-// Buffer per acumular línies del satèl·lit (esperem "T:...:H:..." o "Fallo")
+
 String rxLine;
 
 void setup() {
@@ -32,25 +32,24 @@ void setup() {
   digitalWrite(LED_ALARMA_COMS, LOW);
 
   delay(500);
-  lastRxMillis = millis();       // Evita alarma de coms immediata en arrencar
-  Serial.println("READY");       // Missatge de benvinguda per Python/PC
+  lastRxMillis = millis();       
+  Serial.println("READY");       
 }
 
 void loop() {
-  // --- Pont Sat -> PC + parsing de línies per detectar alarmes ---
+  
   while (EmisorSerial.available()) {
     char c = EmisorSerial.read();
 
-    // Reenviament transparent al PC (monitor sèrie o GUI)
+    
     Serial.write(c);
 
-    // Qualsevol byte rebut "reseteja" el timeout de comunicació
+    
     lastRxMillis = millis();
     digitalWrite(LED_ALARMA_COMS, LOW);  // Comunicació OK ara mateix
 
-    // Acumulem per línies per poder detectar "Fallo" o lectures correctes
+   
     if (c == '\n') {
-      // Procés de la línia completa
       rxLine.trim();
 
       if (rxLine.length() > 0) {
@@ -67,10 +66,8 @@ void loop() {
         }
       }
 
-      // Neteja per a la propera línia
       rxLine = "";
     } else {
-      // Acumulem caràcters fins a '\n'
       rxLine += c;
     }
   }
@@ -86,7 +83,7 @@ void loop() {
     }
   }
 
-  // --- Temporització del parpelleig del LED 13 (ACK) ---
+Temporització del parpelleig del LED 13
   if (isBlinking && (millis() - lastBlinkTime) >= BLINK_DURATION_MS) {
     digitalWrite(LED_PIN, LOW);
     isBlinking = 0;
