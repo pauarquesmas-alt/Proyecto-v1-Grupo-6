@@ -8,6 +8,7 @@ Proyecto que conecta un Arduino "controlador" (satélite) con un Arduino "estaci
 El satélite mide **temperatura y humedad** y envía los datos por serie.  
 La estación de tierra los recibe y los muestra en una **gráfica dinámica** en una interfaz Python.
 </p>
+
 ## 🧪 Video demostración
 https://youtu.be/FFqi9oINteE
 
