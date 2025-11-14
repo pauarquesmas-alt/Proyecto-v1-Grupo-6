@@ -1,4 +1,4 @@
-# Proyecto-v1 Grupo 6
+# Proyecto Grupo 6
 
 # Proyecto Estación de Tierra - Versión 2
 
