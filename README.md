@@ -1,6 +1,6 @@
 # Proyecto-v1 Grupo 6
 
-# Proyecto Estación de Tierra - Versión 1
+# Proyecto Estación de Tierra - Versión 2
 
 ## 📋 Descripción
 Proyecto que conecta un Arduino "controlador" (satélite) con un Arduino "estación de tierra".  
