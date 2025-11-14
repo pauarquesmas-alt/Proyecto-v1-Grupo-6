@@ -1,6 +1,6 @@
 # Proyecto Grupo 6
 
-# Proyecto Estación de Tierra - Versión 2
+# Proyecto Estación de Tierra - Versión 1
 
 ## 📋 Descripción
 Proyecto que conecta un Arduino "controlador" (satélite) con un Arduino "estación de tierra".  
@@ -9,4 +9,9 @@ La estación de tierra los recibe y los muestra en una **gráfica dinámica** en
 
 ## 🧪 Video demostración
 https://youtu.be/FFqi9oINteE
+
+# Proyecto Estación de Tierra - Versión 2
+## 📋 Descripción
+
+## 🧪 Video demostración
 
