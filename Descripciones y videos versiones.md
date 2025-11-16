@@ -19,4 +19,4 @@ El proyecto implementa una estación de tierra conectada a un “satélite” Ar
 </p>
 
 ## 🧪 Video demostración
-
+https://youtu.be/GcaQ2BR3xfE?si=nUMKSqZa3t8V-v8U
