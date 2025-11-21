@@ -20,3 +20,12 @@ El proyecto implementa una estación de tierra conectada a un “satélite” Ar
 
 ## 🧪 Video demostración
 https://youtu.be/GcaQ2BR3xfE?si=nUMKSqZa3t8V-v8U
+
+# Versión 3
+## 📋 Descripción
+<p align="justify">
+Las novedades principales de la versión 3 son: un sistema de detección de errores en la comunicación, el envío por parte del satélite de datos sobre su posición que se mostrarán en una gráfica apropiada, la implementación de un sistema de comunicación inalámbrica entre el satélite y la estación de tierra y la implementación de un sistema de registro de eventos.
+</p>
+
+## 🧪 Video demostración
+
