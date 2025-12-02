@@ -6,10 +6,13 @@
 #define LED_ALARMA_COMS 7       // alarma cuando no hay coms
 
 #define BAUDRATE 9600           // velocidad del puerto
-#define TIMEOUT_COMS_MS 5000    // tiempo max sin recibir nada
+#define TIMEOUT_COMS_MS 15000    // tiempo max sin recibir nada
 
 SoftwareSerial EmisorSerial(10, 11); // serie secundario (10 es RX y 11 TX)
 unsigned long lastRxMillis = 0;      // cuando recibimos lo ultimo
+
+bool alarmaComsActiva = false;
+
 
 // calculo del checksum (suma simple de chars)
 uint8_t calcularChecksum(String msg) {
@@ -79,9 +82,17 @@ void loop() {
   }
 
   // si pasa mucho tiempo sin recibir nada, encendemos la alarma
-  if ((millis() - lastRxMillis) > TIMEOUT_COMS_MS) {
-    digitalWrite(LED_RX_SAT, LOW);         // se apaga el led de recepción
-    digitalWrite(LED_ALARMA_COMS, HIGH);   // y se prende la alarma
-    Serial.println("ALARM_COMMS_ON");      // aviso para python
+  // si pasa mucho tiempo sin recibir nada, encendemos la alarma
+if ((millis() - lastRxMillis) > TIMEOUT_COMS_MS) {
+  digitalWrite(LED_RX_SAT, LOW);
+  digitalWrite(LED_ALARMA_COMS, HIGH);
+
+  if (!alarmaComsActiva) {
+    alarmaComsActiva = true;
+    Serial.println("ALARM_COMMS_ON");  // aviso para python (solo 1 vez)
   }
+} else {
+  alarmaComsActiva = false;
+}
+
 }
