@@ -13,13 +13,17 @@ from tkinter import ttk, messagebox
 
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.pyplot as plt
+
 
 import datetime
 
 # ===== Parámetros de serie =====
-PUERTO_DESEADO = "COM3"     # <- Ajusta si hace falta
+PUERTO_DESEADO = "COM4"     # <- Ajusta si hace falta
 BAUDRATE = 9600
 TIMEOUT_S = 1.0
+GRUPO_ESPERADO = "G6:"
+
 
 # ===== Registro de eventos =====
 RUTA_LOG = "eventos.log"
@@ -136,6 +140,20 @@ class EstacionGUI:
         self.contador_altas = 0
         self.calculo_en_tierra = True  # por defecto: Python
 
+        # ---------- Órbita ----------
+        self.orbit_times = deque(maxlen=2000)
+        self.orbit_x = deque(maxlen=2000)
+        self.orbit_y = deque(maxlen=2000)
+        self.orbit_z = deque(maxlen=2000)
+
+        self.orbit_win = None
+        self.orbit_fig = None
+        self.orbit_ax = None
+        self.orbit_canvas = None
+        self.orbit_plot = None
+        self.orbit_last = None
+
+
         # Radar (último punto y rastro)
         self.angulo_radar = 0.0
         self.distancia_radar = 0.0
@@ -197,43 +215,51 @@ class EstacionGUI:
         self.btn_obs = ttk.Button(
             sidebar, text="Añadir observación", command=self.on_obs
         )
+        self.btn_orbita = ttk.Button(
+            sidebar, text="Ver órbita", command=self.abrir_orbita, state="disabled"
+        )
+
 
         # Colocación en la barra lateral
         self.btn_iniciar.grid(row=0, column=0, sticky="ew", pady=(0, 8))
         self.btn_parar.grid(row=1, column=0, sticky="ew", pady=4)
+
         self.btn_periodo.grid(row=2, column=0, sticky="ew", pady=4)
         self.btn_orient.grid(row=3, column=0, sticky="ew", pady=4)
         self.btn_auto.grid(row=4, column=0, sticky="ew", pady=4)
+
         self.btn_radar_toggle.grid(row=5, column=0, sticky="ew", pady=4)
         self.btn_radar_periodo.grid(row=6, column=0, sticky="ew", pady=4)
-        self.btn_limite.grid(row=7, column=0, sticky="ew", pady=8)
 
-        ttk.Separator(sidebar, orient="horizontal").grid(row=8, column=0, sticky="ew", pady=8)
+        self.btn_orbita.grid(row=7, column=0, sticky="ew", pady=4)
+
+        self.btn_limite.grid(row=8, column=0, sticky="ew", pady=8)
+        ttk.Separator(sidebar, orient="horizontal").grid(row=9, column=0, sticky="ew", pady=8)
 
         ttk.Label(sidebar, text="Modo de cálculo de medias:").grid(
-            row=9, column=0, sticky="w", padx=5
+            row=10, column=0, sticky="w", padx=5
         )
         self.modo_var = tk.StringVar(value="tierra")
         ttk.Radiobutton(
             sidebar, text="En Tierra (Python)", variable=self.modo_var,
             value="tierra", command=self.on_modo_calculo
-        ).grid(row=10, column=0, sticky="w", padx=10)
+        ).grid(row=11, column=0, sticky="w", padx=10)
         ttk.Radiobutton(
             sidebar, text="En Satélite (Arduino)", variable=self.modo_var,
             value="satelite", command=self.on_modo_calculo
-        ).grid(row=11, column=0, sticky="w", padx=10)
+        ).grid(row=12, column=0, sticky="w", padx=10)
 
-        ttk.Separator(sidebar, orient="horizontal").grid(row=12, column=0, sticky="ew", pady=8)
+        ttk.Separator(sidebar, orient="horizontal").grid(row=13, column=0, sticky="ew", pady=8)
 
         self.lbl_estado = ttk.Label(
             sidebar,
             text="Puerto: —\nMuestras: 0\nÚltima T/H: —/—",
             justify="left"
         )
-        self.lbl_estado.grid(row=13, column=0, sticky="ew", pady=(0, 6))
+        self.lbl_estado.grid(row=14, column=0, sticky="ew", pady=(0, 6))
 
-        self.btn_eventos.grid(row=14, column=0, sticky="ew", pady=4)
-        self.btn_obs.grid(row=15, column=0, sticky="ew", pady=4)
+        self.btn_eventos.grid(row=15, column=0, sticky="ew", pady=4)
+        self.btn_obs.grid(row=16, column=0, sticky="ew", pady=4)
 
         # ---------- Gráficas T/H/Media ----------
         self.fig = Figure(figsize=(7, 6), dpi=100, constrained_layout=True)
@@ -323,6 +349,8 @@ class EstacionGUI:
         self.btn_auto.config(state="normal")
         self.btn_radar_toggle.config(state="normal")
         self.btn_radar_periodo.config(state="normal")
+        self.btn_orbita.config(state="normal")
+
 
     def on_parar(self):
         if not self.conectado:
@@ -444,6 +472,13 @@ class EstacionGUI:
                     if linea is None:
                         continue  # ignorar mensaje corrupto
 
+                    # ---- FILTRO POR GRUPO ----
+                    if not linea.startswith(GRUPO_ESPERADO):
+                        continue  # no es mi grupo, lo ignoro
+
+                    # quitar prefijo G6:
+                    linea = linea[len(GRUPO_ESPERADO):]
+
                     partes = linea.split(':')
                     codigo = partes[0]
 
@@ -475,14 +510,7 @@ class EstacionGUI:
                             )
                         )
 
-                    # 4:media  -> media calculada en satélite
-                    elif codigo == "4" and len(partes) >= 2:
-                        try:
-                            media = float(partes[1])
-                        except ValueError:
-                            continue
-                        self.medias.append(media)
-                        self.comprobar_alarma(media)
+                    # 4:media  -> media calculada en satélit
 
                     # 5: -> alarma tres medias en satélite
                     elif codigo == "5":
@@ -523,6 +551,34 @@ class EstacionGUI:
                             "Fallo en el sensor de distancia (HC-SR04)"
                         )
 
+                                        # 4:media  -> media calculada en satélite
+                    # 4:time:x:y:z -> órbita (nuevo)
+                    elif codigo == "4":
+                        # ÓRBITA: esperamos 4:time:x:y:z (5 partes mínimo)
+                        if len(partes) >= 5:
+                            try:
+                                t_orb = float(partes[1])
+                                x = float(partes[2])
+                                y = float(partes[3])
+                                z = float(partes[4])
+                            except ValueError:
+                                continue
+
+                            self.orbit_times.append(t_orb)
+                            self.orbit_x.append(x)
+                            self.orbit_y.append(y)
+                            self.orbit_z.append(z)
+
+                        # MEDIA: formato antiguo 4:media
+                        elif len(partes) >= 2:
+                            try:
+                                media = float(partes[1])
+                            except ValueError:
+                                continue
+                            self.medias.append(media)
+                            self.comprobar_alarma(media)
+
+
                 time.sleep(0.01)
             except Exception as e:
                 print("[ERROR RX]", e)
@@ -533,6 +589,53 @@ class EstacionGUI:
         if texto:
             registrar_evento("OBSERVACION", texto)
             messagebox.showinfo("OK", "Observación registrada.")
+
+
+
+    def abrir_orbita(self):
+        """Abre ventana con gráfica de órbita y empieza a actualizarla."""
+        if self.orbit_win and tk.Toplevel.winfo_exists(self.orbit_win):
+            # si ya existe, la traemos al frente
+            self.orbit_win.lift()
+            return
+
+        win = tk.Toplevel(self.root)
+        win.title("Órbita del satélite (vista polar norte)")
+        win.geometry("620x620")
+        self.orbit_win = win
+
+        from matplotlib.figure import Figure
+        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+        self.orbit_fig = Figure(figsize=(6, 6), dpi=100)
+        self.orbit_ax = self.orbit_fig.add_subplot(111)
+        self.orbit_ax.set_aspect("equal", "box")
+        self.orbit_ax.set_xlabel("X (m)")
+        self.orbit_ax.set_ylabel("Y (m)")
+        self.orbit_ax.set_title("Órbita ecuatorial (top view)")
+        self.orbit_ax.grid(True, linestyle=":", linewidth=0.8, alpha=0.6)
+
+        # Tierra como círculo
+        R_EARTH = 6371000
+        earth_circle = plt.Circle((0, 0), R_EARTH, color="orange", fill=False, lw=2)
+        self.orbit_ax.add_artist(earth_circle)
+
+        # Línea órbita + punto actual
+        self.orbit_plot, = self.orbit_ax.plot([], [], "b-", lw=1.5, label="Trayectoria")
+        self.orbit_last = self.orbit_ax.scatter([], [], color="red", s=40, label="Último punto")
+        self.orbit_ax.legend(loc="upper right")
+
+        self.orbit_canvas = FigureCanvasTkAgg(self.orbit_fig, master=win)
+        self.orbit_canvas.draw()
+        self.orbit_canvas.get_tk_widget().pack(fill="both", expand=True)
+
+        # cerrar ventana
+        def _on_close():
+            self.orbit_win = None
+            win.destroy()
+
+        win.protocol("WM_DELETE_WINDOW", _on_close)
+
 
     # ---------- Ventana registro de eventos ----------
     def abrir_eventos(self):
@@ -653,6 +756,23 @@ class EstacionGUI:
         self.radar_canvas.draw_idle()
 
         self.root.after(REFRESH_MS, self.actualizar_vista)
+
+        #orbita
+                # Órbita (si la ventana está abierta)
+        if self.orbit_win is not None and self.orbit_ax is not None:
+            xs = list(self.orbit_x)
+            ys = list(self.orbit_y)
+            if len(xs) >= 2:
+                self.orbit_plot.set_data(xs, ys)
+                self.orbit_last.set_offsets([[xs[-1], ys[-1]]])
+
+                # auto-escalado razonable
+                lim = max(max(map(abs, xs)), max(map(abs, ys)), 7e6) * 1.05
+                self.orbit_ax.set_xlim(-lim, lim)
+                self.orbit_ax.set_ylim(-lim, lim)
+
+            self.orbit_canvas.draw_idle()
+
 
     # ---------- Cierre ----------
     def on_close(self):
