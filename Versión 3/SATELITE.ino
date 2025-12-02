@@ -15,14 +15,14 @@ SoftwareSerial mySerial(10, 11);  // LoRa
 Servo servo;
 
 // ==== IDENTIFICADOR DE GRUPO ====
-String GRUPO = "G6:";    // <<--- CAMBIA “4” POR TU NÚMERO DE GRUPO
+String GRUPO = "G6:";    // <<--- CAMBIA “6” POR TU NÚMERO DE GRUPO
 
 // --------------------- TIEMPOS ----------------------
-// Envíos cada 8 segundos
-unsigned long periodoTH = 8000;
-unsigned long periodoDist = 8000;
+// Envíos cada 2 segundos (más frecuencia)
+unsigned long periodoTH   = 2000;   // antes: 8000
+unsigned long periodoDist = 2000;   // antes: 8000
 
-unsigned long proximaLecturaTH = 0;
+unsigned long proximaLecturaTH   = 0;
 unsigned long proximaLecturaDist = 0;
 
 bool envioTHActivo = true;
@@ -80,6 +80,54 @@ void actualizarServo() {
   servo.write(angulo);
 }
 
+/* =========================================================
+   ===============  SIMULADOR DE ÓRBITA  ===================
+   ========================================================= */
+
+// Constants
+const double G = 6.67430e-11;       // Gravitational constant
+const double M = 5.97219e24;        // Mass of Earth (kg)
+const double R_EARTH = 6371000.0;   // Radius of Earth (m)
+const double ALTITUDE = 400000.0;   // Altitude (m)
+
+// Ahora: órbita más lenta y suave, actualizada cada 2s
+const unsigned long MILLIS_BETWEEN_UPDATES = 2000; // 2 s
+const double TIME_COMPRESSION = 30.0;              // 30x (más lenta → círculo más “limpio”)
+
+// Variables
+unsigned long nextOrbitUpdate = 0;
+double real_orbital_period = 0.0;
+double r = 0.0;
+
+// Calcula y envía órbita
+void simulate_orbit(unsigned long ms) {
+  double time = (ms / 1000.0) * TIME_COMPRESSION; 
+  double angle = 2.0 * PI * (time / real_orbital_period);
+
+  double x = r * cos(angle);
+  double y = r * sin(angle);
+  double z = 0.0;  // órbita ecuatorial plana
+
+  // Enviar por LoRa con checksum (código 4)
+  // Formato: 4:time:x:y:z
+  enviarConChecksum(
+    "4:" + String(time, 1) + ":" +
+    String(x, 0) + ":" +
+    String(y, 0) + ":" +
+    String(z, 0)
+  );
+
+  // Debug por USB si quieres verlo
+  Serial.print("Orbit -> t=");
+  Serial.print(time, 1);
+  Serial.print(" x=");
+  Serial.print(x, 0);
+  Serial.print(" y=");
+  Serial.print(y, 0);
+  Serial.print(" z=");
+  Serial.println(z, 0);
+}
+
 // -------------------- SETUP -------------------------
 void setup() {
   Serial.begin(9600);    // solo para debug
@@ -92,14 +140,27 @@ void setup() {
   pinMode(TRIG_PIN, OUTPUT);
   pinMode(ECHO_PIN, INPUT);
 
-  Serial.println("SATELITE INICIADO (sin órbita)");
+  // --- ORBITA: inicialización ---
+  r = R_EARTH + ALTITUDE;
+  real_orbital_period = 2.0 * PI * sqrt(pow(r, 3) / (G * M));
+  nextOrbitUpdate = MILLIS_BETWEEN_UPDATES;
+
+  Serial.println("SATELITE INICIADO CON ÓRBITA");
+  Serial.print("Periodo orbital real (s): ");
+  Serial.println(real_orbital_period, 1);
 }
 
 // --------------------- LOOP --------------------------
 void loop() {
   unsigned long now = millis();
 
-  // ----------- TEMPERATURA/HUMEDAD (cada 8s) ----------
+  // ----------- ÓRBITA (cada 2s) -----------------------
+  if (now >= nextOrbitUpdate) {
+    simulate_orbit(now);
+    nextOrbitUpdate = now + MILLIS_BETWEEN_UPDATES;
+  }
+
+  // ----------- TEMPERATURA/HUMEDAD (cada 2s) ----------
   if (envioTHActivo && now >= proximaLecturaTH) {
     proximaLecturaTH = now + periodoTH;
 
@@ -113,7 +174,7 @@ void loop() {
     }
   }
 
-  // ----------- DISTANCIA (cada 8s) --------------------
+  // ----------- DISTANCIA (cada 2s) --------------------
   if (envioRadarActivo && now >= proximaLecturaDist) {
     proximaLecturaDist = now + periodoDist;
 
