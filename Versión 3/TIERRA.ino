@@ -85,4 +85,3 @@ void loop() {
     Serial.println("ALARM_COMMS_ON");      // aviso para python
   }
 }
-
