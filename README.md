@@ -29,3 +29,13 @@ Las novedades principales de la versión 3 son: un sistema de detección de erro
 
 ## 🧪 Video demostración
 https://youtu.be/kKIEUvKRv5c
+
+# Versión 3
+## 📋 Descripción
+<p align="justify">
+En esta versión se ha mejorado la interfaz gráfica de la estación de tierra y se ha añadido un sistema de inicio de sesión para controlar el acceso al uso del satélite. Se ha incorporado una nueva pantalla que muestra la última temperatura y humedad recibidas, así como la media de las diez últimas temperaturas, controlada mediante una botonera desde tierra.
+Además, las gráficas se han optimizado para representar únicamente los últimos diez valores de temperatura y se ha mejorado la gestión de la comunicación LoRa para evitar la saturación del canal. Estas mejoras aumentan la claridad visual, la eficiencia y la robustez del sistema.
+</p>
+
+## 🧪 Video demostración
+
