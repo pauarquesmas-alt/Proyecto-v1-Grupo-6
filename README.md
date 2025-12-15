@@ -30,7 +30,7 @@ Las novedades principales de la versión 3 son: un sistema de detección de erro
 ## 🧪 Video demostración
 https://youtu.be/kKIEUvKRv5c
 
-# Versión 3
+# Versión 4
 ## 📋 Descripción
 <p align="justify">
 En esta versión se ha mejorado la interfaz gráfica de la estación de tierra y se ha añadido un sistema de inicio de sesión para controlar el acceso al uso del satélite. Se ha incorporado una nueva pantalla que muestra la última temperatura y humedad recibidas, así como la media de las diez últimas temperaturas, controlada mediante una botonera desde tierra.
