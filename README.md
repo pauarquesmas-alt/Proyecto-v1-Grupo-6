@@ -33,8 +33,11 @@ https://youtu.be/kKIEUvKRv5c
 # Versión 4
 ## 📋 Descripción
 <p align="justify">
-En esta versión se ha mejorado la interfaz gráfica de la estación de tierra y se ha añadido un sistema de inicio de sesión para controlar el acceso al uso del satélite. Se ha incorporado una nueva pantalla que muestra la última temperatura y humedad recibidas, así como la media de las diez últimas temperaturas, controlada mediante una botonera desde tierra.
-Además, las gráficas se han optimizado para representar únicamente los últimos diez valores de temperatura y se ha mejorado la gestión de la comunicación LoRa para evitar la saturación del canal. Estas mejoras aumentan la claridad visual, la eficiencia y la robustez del sistema.
+Se incorpora mejoras avanzadas orientadas a ofrecer un sistema más profesional, robusto y eficiente. Se ha rediseñado completamente la interfaz gráfica de la estación de tierra y se ha añadido un sistema de inicio de sesión que profesionaliza el acceso y el control del satélite.
+
+Se ha implementado una nueva pantalla de monitorización que muestra la última temperatura y humedad recibidas, así como la media de las diez últimas temperaturas, con control total mediante una botonera desde tierra. Las gráficas se han optimizado para representar únicamente los diez valores más recientes, mejorando la claridad y el rendimiento.
+
+Asimismo, se ha optimizado la comunicación LoRa para evitar la saturación del canal, garantizando una transmisión estable y fiable. Todas estas mejoras han sido desarrolladas tras corregir e implementar íntegramente las sugerencias recibidas en versiones anteriores, consolidando un sistema final de alto nivel técnico.
 </p>
 
 ## 🧪 Video demostración
