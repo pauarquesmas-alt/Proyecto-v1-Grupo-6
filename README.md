@@ -2,9 +2,9 @@
 # El equipo
 <p align="justify">
 Latorre Magliocco, Giulia
-  ---
+<br><br>
 Arques Mas, Pau
-  ---
+<br><br>
 Sambró Gómez, Aina
 </p>
 
