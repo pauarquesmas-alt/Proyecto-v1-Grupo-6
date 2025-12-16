@@ -40,11 +40,13 @@ https://youtu.be/kKIEUvKRv5c
 
 # Versión 4
 ## 📋 Descripción
-La **Versión 4** introduce un conjunto de **mejoras** que elevan el sistema a un nivel más profesional y completo. Entre las principales novedades destacan el **rediseño integral de la interfaz gráfica de la estación de tierra**, la incorporación de un **sistema de inicio de sesión** para controlar el acceso al satélite, una **nueva pantalla de monitorización avanzada** que muestra los últimos valores recibidos y la media de las diez últimas temperaturas, así como la **optimización de las gráficas**, limitadas a los valores más recientes para mejorar la claridad y el rendimiento. Además, se ha **optimizado la comunicación LoRa** para evitar la saturación del canal y garantizar una transmisión más estable y fiable. Todas estas mejoras se han implementado tras corregir e integrar las sugerencias recibidas en versiones anteriores.
+## 🚀 Sistema Satelital – Versión 4
+
+La **Versión 4** introduce un conjunto de **mejoras avanzadas** que elevan el sistema a un nivel más profesional y completo. Entre las principales novedades destacan el **rediseño integral de la interfaz gráfica de la estación de tierra**, la incorporación de un **sistema de inicio de sesión** para controlar el acceso al satélite, una **nueva pantalla de monitorización avanzada** que muestra los últimos valores recibidos y la media de las diez últimas temperaturas, así como la **optimización de las gráficas**, limitadas a los valores más recientes para mejorar la claridad y el rendimiento. Además, se ha **optimizado la comunicación LoRa** para evitar la saturación del canal y garantizar una transmisión más estable y fiable. Todas estas mejoras se han implementado tras corregir e integrar las sugerencias recibidas en versiones anteriores.
 
 La Versión 4 consolida así un sistema **completo, estable y técnicamente maduro**, en el que se integran todas las funcionalidades exigidas hasta la Versión 3 junto con estas nuevas aportaciones, siguiendo fielmente los criterios de evaluación definidos en la asignatura.
 
-Desde el punto de vista funcional, el prototipo **cumple íntegramente los requisitos especificados**, implementando la captura, el procesamiento y la transmisión de datos de **temperatura, humedad y posición del satélite**. La comunicación bidireccional con la estación de tierra permite tanto el envío periódico de información como el control remoto del satélite, y su correcto funcionamiento ha sido verificado mediante **pruebas unitarias del sistema**.
+Desde el punto de vista funcional, el prototipo **cumple íntegramente los requisitos especificados**, implementando la captura, el procesamiento y la transmisión de datos de **temperatura, humedad y posición del satélite**. La comunicación bidireccional con la estación de tierra permite tanto el envío periódico de información como el control remoto del satélite, y su correcto funcionamiento ha sido verificado mediante **pruebas integradas del sistema completo**.
 
 El diseño del sistema prioriza la **robustez**, permitiendo gestionar errores de sensores, posibles fallos en la comunicación y entradas incorrectas del usuario sin provocar bloqueos. De este modo, el sistema mantiene un comportamiento estable y predecible incluso ante situaciones anómalas, reforzando su fiabilidad.
 
@@ -53,7 +55,6 @@ La estación de tierra dispone de una **interfaz gráfica clara e intuitiva**, r
 El código del satélite y de la estación de tierra está **bien organizado y documentado**, estructurado en funciones claramente definidas y acompañado de comentarios explicativos. Esta organización facilita la comprensión del sistema y permite realizar modificaciones o ampliaciones con un esfuerzo reducido. Asimismo, se han utilizado **algoritmos y estructuras de datos eficientes**, optimizando el rendimiento, la visualización de la información y el uso del canal de comunicación.
 
 Finalmente, la Versión 4 incorpora **funcionalidades adicionales de alto valor técnico**, como la monitorización avanzada y la mejora de la comunicación LoRa, que hacen que el proyecto resulte especialmente completo y sorprendente. Todo ello se presenta de forma cuidada tanto en el repositorio de GitHub como en el **vídeo demostrativo**, que muestra de manera clara y profesional el funcionamiento del sistema.
-
 
 ## 🧪 Video demostración
 
