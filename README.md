@@ -1,4 +1,10 @@
 # Proyecto Grupo 6
+# El equipo
+<p align="justify">
+Latorre Magliocco, Giulia
+Arques Mas, Pau
+Sambró Gómez, Aina
+</p>
 
 # Versión 1
 
