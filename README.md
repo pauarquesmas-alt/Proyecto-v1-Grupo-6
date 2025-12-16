@@ -40,7 +40,6 @@ https://youtu.be/kKIEUvKRv5c
 
 # Versión 4
 ## 📋 Descripción
-## 🚀 Sistema Satelital – Versión 4
 <p align="justify">
 La <strong>Versión 4</strong> introduce un conjunto de <strong>mejoras avanzadas</strong> que elevan el sistema a un nivel más profesional y completo. Entre las principales novedades destacan el <strong>rediseño integral de la interfaz gráfica de la estación de tierra</strong>, la incorporación de un <strong>sistema de inicio de sesión</strong> para controlar el acceso al satélite, una <strong>nueva pantalla de monitorización avanzada</strong> que muestra los últimos valores recibidos y la media de las diez últimas temperaturas, así como la <strong>optimización de las gráficas</strong>, limitadas a los valores más recientes para mejorar claridad y rendimiento. Además, se ha <strong>optimizado la comunicación LoRa</strong> para evitar la saturación del canal y garantizar una transmisión más estable y fiable. Todas estas mejoras se han implementado tras corregir e integrar las sugerencias recibidas en versiones anteriores.
 </p>
