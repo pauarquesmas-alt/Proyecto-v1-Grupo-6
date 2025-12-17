@@ -227,6 +227,12 @@ Se recomienda visualizar el video para observar la transmisión y el graficado e
 <p align="center">
   <em>Figura 2. Esquema hardware completo del sistema satelital correspondiente a la Versión 4.</em>
 </p>
+<p align="center">
+  <img src="Imagenes/Version_4_Tierra.png" width="600">
+</p>
+<p align="center">
+  <em>Figura 3. Sistema de tierra correspondiente a la Versión 4.</em>
+</p>
 
 <hr>
 
