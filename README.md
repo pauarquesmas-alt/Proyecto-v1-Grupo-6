@@ -12,7 +12,8 @@ Sistema de telemetría con Arduino y visualización en tiempo real en Python
   <img src="https://img.shields.io/badge/Comunicación-LoRa-blueviolet">
 </p>
 
-## 👥 Equipo de trabajo
+<h2>📄 Descripción</h2>
+<hr>
 - **Giulia Latorre Magliocco**
 - **Pau Arques Mas**
 - **Aina Sambró Gómez**
