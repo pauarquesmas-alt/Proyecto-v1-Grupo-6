@@ -23,7 +23,7 @@ Sistema de telemetría con Arduino y visualización en tiempo real en Python
 
 <hr>
 
-<h3 align="center">📄 Descripción</h3>
+##📄 Descripción</h3>
 
 <p>
 Proyecto que conecta un Arduino <strong>controlador (satélite)</strong> con un Arduino
