@@ -13,8 +13,8 @@ Sambró Gómez, Aina
 ## 📋 Descripción
 <p align="justify">
 Proyecto que conecta un Arduino "controlador" (satélite) con un Arduino "estación de tierra".  
-El satélite mide **temperatura y humedad** y envía los datos por serie.  
-La estación de tierra los recibe y los muestra en una **gráfica dinámica** en una interfaz Python.
+El satélite mide temperatura y humedad y envía los datos por serie.  
+La estación de tierra los recibe y los muestra en una gráfica dinámica en una interfaz Python.
 </p>
 
 ## 🧪 Video demostración
