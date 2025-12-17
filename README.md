@@ -18,7 +18,8 @@ Sistema de telemetría con Arduino y visualización en tiempo real en Python
 - **Aina Sambró Gómez**
 
 ---
-## VERSIÓN 1
+
+<h1 align="center"> ## VERSIÓN 1
 ## 📄 Descripción
 
 Proyecto que conecta un Arduino **controlador (satélite)** con un Arduino **estación de tierra** mediante comunicación serie.
