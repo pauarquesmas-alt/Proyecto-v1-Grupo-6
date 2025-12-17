@@ -111,7 +111,6 @@ Las novedades principales de la versión 3 son: un sistema de detección de erro
 <blockquote>
 Se recomienda visualizar el vídeo para observar la transmisión de datos de sensores y de posicionamiento, su visualización en tiempo real, el almacenamiento y recuperación de información, y la representación de la posición del satélite sobre mapas desde la estación de tierra.
 </blockquote>
-<hr>
 
 ## 🧠 Arquitectura del sistema
 
@@ -135,7 +134,7 @@ Se recomienda visualizar el vídeo para observar la transmisión de datos de sen
       - Almacenamiento y recuperación de datos
       - Envío de órdenes
 ```
-
+<hr>
 <h2 align="center">VERSIÓN 4</h2>
 
 <h2>📄 Descripción</h2>
