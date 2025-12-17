@@ -72,7 +72,7 @@ El proyecto implementa una estación de tierra conectada a un “satélite” Ar
 👉 https://youtu.be/GcaQ2BR3xfE?si=nUMKSqZa3t8V-v8U
 
 <blockquote>
-Se recomienda visualizar el video para observar la transmisión y el graficado en tiempo real.
+Se recomienda visualizar el vídeo para observar en tiempo real la transmisión de datos de temperatura, humedad y proximidad, así como su graficado dinámico y la interacción con el sistema mediante el envío de órdenes al satélite.
 </blockquote>
 
 ## 🧠 Arquitectura del sistema
