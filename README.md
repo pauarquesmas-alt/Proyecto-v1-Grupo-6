@@ -9,7 +9,7 @@ Sistema de telemetría con Arduino y visualización en tiempo real en Python
   <img src="https://img.shields.io/badge/Estado-Activo-success">
   <img src="https://img.shields.io/badge/Arduino-UNO-blue">
   <img src="https://img.shields.io/badge/Python-3.10-yellow">
-  <img src="https://img.shields.io/badge/Comunicación-LoRa%20SX1278-blueviolet">
+  <img src="https://img.shields.io/badge/Comunicación-LoRa-blueviolet">
 </p>
 
 ## 👥 Equipo de trabajo
