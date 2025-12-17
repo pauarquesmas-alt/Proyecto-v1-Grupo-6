@@ -77,17 +77,26 @@ Se recomienda visualizar el video para observar la transmisión y el graficado e
 
 
 <hr>
-# Versión 3
-## 📋 Descripción
-<p align="justify">
+<h2 align="center">VERSIÓN 3</h2>
+
+<h2>📄 Descripción</h2>
+
+<p>
 Las novedades principales de la versión 3 son: un sistema de detección de errores en la comunicación, el envío por parte del satélite de datos sobre su posición que se mostrarán en una gráfica apropiada, la implementación de un sistema de comunicación inalámbrica entre el satélite y la estación de tierra y la implementación de un sistema de registro de eventos.
 </p>
 
-## 🧪 Video demostración
-https://youtu.be/kKIEUvKRv5c
+<h2>🎥 Video demostración</h2>
 
-# Versión 4
-## 📋 Descripción
+👉 https://youtu.be/kKIEUvKRv5c
+
+<blockquote>
+Se recomienda visualizar el video para observar la transmisión y el graficado en tiempo real.
+</blockquote>
+<hr>
+
+<h2 align="center">VERSIÓN 4</h2>
+
+<h2>📄 Descripción</h2>
 <p align="justify">
 La <strong>Versión 4</strong> introduce un conjunto de <strong>mejoras avanzadas</strong> que elevan el sistema a un nivel más profesional y completo. Entre las principales novedades destacan el <strong>rediseño integral de la interfaz gráfica de la estación de tierra</strong>, la incorporación de un <strong>sistema de inicio de sesión</strong> para controlar el acceso al satélite, una <strong>nueva pantalla de monitorización avanzada</strong> que muestra los últimos valores recibidos y la media de las diez últimas temperaturas, así como la <strong>optimización de las gráficas</strong>, limitadas a los valores más recientes para mejorar claridad y rendimiento. Además, se ha <strong>optimizado la comunicación LoRa</strong> para evitar la saturación del canal y garantizar una transmisión más estable y fiable. Todas estas mejoras se han implementado tras corregir e integrar las sugerencias recibidas en versiones anteriores.
 </p>
@@ -116,5 +125,17 @@ El código del satélite y de la estación de tierra está <strong>bien organiza
 Finalmente, la Versión 4 incorpora <strong>funcionalidades adicionales de alto valor técnico</strong>, como la monitorización avanzada y la mejora de la comunicación LoRa, que hacen que el proyecto resulte especialmente completo y sorprendente. Todo ello se presenta de forma cuidada tanto en el repositorio de GitHub como en el vídeo demostrativo, que muestra de manera clara y profesional el funcionamiento del sistema.
 </p>
 
-## 🧪 Video demostración
+<p>
+Las novedades principales de la versión 3 son: un sistema de detección de errores en la comunicación, el envío por parte del satélite de datos sobre su posición que se mostrarán en una gráfica apropiada, la implementación de un sistema de comunicación inalámbrica entre el satélite y la estación de tierra y la implementación de un sistema de registro de eventos.
+</p>
+
+<h2>🎥 Video demostración</h2>
+
+👉 
+
+<blockquote>
+Se recomienda visualizar el video para observar la transmisión y el graficado en tiempo real.
+</blockquote>
+<hr>
+
 
