@@ -1,12 +1,11 @@
-# Proyecto Grupo 6
-# El equipo
-<p align="justify">
-Latorre Magliocco, Giulia
-<br><br>
-Arques Mas, Pau
-<br><br>
-Sambró Gómez, Aina
-</p>
+# Sistema Satelital Simulado – Proyecto de Computación
+
+## 👥 Equipo de trabajo
+
+- **Giulia Latorre Magliocco**  
+- **Pau Arques Mas**  
+- **Aina Sambró Gómez**
+
 
 # Versión 1
 
