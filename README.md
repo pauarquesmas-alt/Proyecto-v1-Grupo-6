@@ -58,6 +58,7 @@ Se recomienda visualizar el video para observar la transmisión y el graficado e
 [ Interfaz Python ]
 ```
 
+<hr>
 <h2 align="center">VERSIÓN 2</h2>
 
 <h2>📄 Descripción</h2>
@@ -75,6 +76,7 @@ Se recomienda visualizar el video para observar la transmisión y el graficado e
 </blockquote>
 
 
+<hr>
 # Versión 3
 ## 📋 Descripción
 <p align="justify">
