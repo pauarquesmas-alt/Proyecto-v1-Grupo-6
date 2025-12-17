@@ -113,6 +113,29 @@ Se recomienda visualizar el video para observar la transmisión y el graficado e
 </blockquote>
 <hr>
 
+## 🧠 Arquitectura del sistema
+
+```text
+[ Sensor DHT (Temp / Hum) ]        [ Sensor Ultrasonidos ]
+             ↓                              ↓
+        [ Arduino Satélite ] ── Control ── [ Servo motor ]
+             ↓
+     [ Sistema de posicionamiento ]
+             ↓   ↑
+     Comunicación Serie / LoRa
+             ↓   ↑
+   [ Arduino Estación de Tierra ]
+             ↓
+            USB
+             ↓
+     [ Interfaz Python (GUI) ]
+      - Gráficas en tiempo real
+      - Visualización en mapas
+      - Alarmas
+      - Almacenamiento y recuperación de datos
+      - Envío de órdenes
+```
+
 <h2 align="center">VERSIÓN 4</h2>
 
 <h2>📄 Descripción</h2>
