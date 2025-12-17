@@ -59,6 +59,17 @@ Se recomienda visualizar el video para observar la transmisión y el graficado e
 ```
 
 <hr>
+
+<p align="center">
+  <img src="img/version1_hardware.png" width="600">
+</p>
+<p align="center">
+  <em>Figura X. Esquema de conexión de la Versión 1 del sistema satelital. Se muestra la comunicación serie entre el Arduino satélite y el Arduino de la estación de tierra, así como la conexión del sensor de temperatura y humedad (DHT) para la adquisición y transmisión periódica de datos.</em>
+</p>
+
+
+
+
 <h2 align="center">VERSIÓN 2</h2>
 
 <h2>📄 Descripción</h2>
