@@ -1,4 +1,5 @@
 # Sistema Satelital Simulado – Proyecto de Computación
+
 <span style="display:inline-block;background-color:#5865F2;color:white;padding:10px 16px;border-radius:8px;font-size:18px;font-weight:700;">
 👥 Equipo de trabajo
 </span>
