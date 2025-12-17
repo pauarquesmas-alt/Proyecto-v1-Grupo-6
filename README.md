@@ -1,8 +1,8 @@
 # Sistema Satelital Simulado – Proyecto de Computación
-<div style="border: 2px solid #4da6ff; padding: 8px; border-radius: 6px; background-color: #f2f8ff">
-<span style="background-color:#31A8FF;color:white;padding:6px 12px;border-radius:6px;font-size:12px;font-weight:600;">
+<span style="display:inline-block;background-color:#5865F2;color:white;padding:10px 16px;border-radius:8px;font-size:18px;font-weight:700;">
 👥 Equipo de trabajo
 </span>
+
 
 - **Giulia Latorre Magliocco**  
 - **Pau Arques Mas**  
