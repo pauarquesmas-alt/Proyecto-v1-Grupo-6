@@ -13,18 +13,18 @@ Sistema de telemetría con Arduino y visualización en tiempo real en Python
 </p>
 
 <h2>👥 El equipo</h2>
-<hr>
-- **Giulia Latorre Magliocco**
-- **Pau Arques Mas**
-- **Aina Sambró Gómez**
 
----
+<ul>
+  <li><strong>Giulia Latorre Magliocco</strong></li>
+  <li><strong>Pau Arques Mas</strong></li>
+  <li><strong>Aina Sambró Gómez</strong></li>
+</ul>
+
+<hr>
 
 <h2 align="center">VERSIÓN 1</h2>
-<hr>
 
 <h2>📄 Descripción</h2>
-<hr>
 
 <p>
 Proyecto que conecta un Arduino <strong>controlador (satélite)</strong> con un Arduino
@@ -37,15 +37,14 @@ estación de tierra los recibe, procesa y muestra en una
 <strong>gráfica dinámica desarrollada en Python</strong>.
 </p>
 
-
-
-## 🎥 Video demostración
+<h2>🎥 Video demostración</h2>
 
 👉 https://youtu.be/FFqi9oINteE
 
-> Se recomienda visualizar el video para observar la transmisión y graficado en tiempo real.
+<blockquote>
+Se recomienda visualizar el video para observar la transmisión y el graficado en tiempo real.
+</blockquote>
 
----
 
 ## 🧠 Arquitectura del sistema
 
