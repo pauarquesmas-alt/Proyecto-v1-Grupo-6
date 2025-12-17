@@ -75,6 +75,25 @@ El proyecto implementa una estación de tierra conectada a un “satélite” Ar
 Se recomienda visualizar el video para observar la transmisión y el graficado en tiempo real.
 </blockquote>
 
+## 🧠 Arquitectura del sistema
+
+```text
+[ Sensor DHT (Temp / Hum) ]        [ Sensor Ultrasonidos ]
+             ↓                              ↓
+        [ Arduino Satélite ] ── Control ── [ Servo motor ]
+             ↓   ↑
+     Comunicación Serie / LoRa
+             ↓   ↑
+   [ Arduino Estación de Tierra ]
+             ↓
+            USB
+             ↓
+     [ Interfaz Python (GUI) ]
+      - Gráficas
+      - Alarmas
+      - Envío de órdenes
+```
+
 
 <hr>
 <h2 align="center">VERSIÓN 3</h2>
