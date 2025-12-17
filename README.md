@@ -69,7 +69,6 @@ Se recomienda visualizar el video para observar la transmisión y el graficado e
 
 
 
-
 <h2 align="center">VERSIÓN 2</h2>
 
 <h2>📄 Descripción</h2>
@@ -221,6 +220,14 @@ Se recomienda visualizar el video para observar la transmisión y el graficado e
          - Envío de órdenes al satélite
          - Almacenamiento y recuperación de datos
 ```
+
+<p align="center">
+  <img src="Imagenes/Version4.png" width="600">
+</p>
+<p align="center">
+  <em>Figura 2. Esquema hardware completo del sistema satelital correspondiente a la Versión 4.</em>
+</p>
+
 <hr>
 
 
