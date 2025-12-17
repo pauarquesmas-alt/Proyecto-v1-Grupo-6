@@ -1,8 +1,3 @@
-# Sistema Satelital Simulado – Proyecto de Computación
-## 👥 Equipo de trabajo
-- **Giulia Latorre Magliocco**
-- **Pau Arques Mas**
-- **Aina Sambró Gómez**
 
 <h1 align="center">🛰️ Estación Satélite Arduino</h1>
 
@@ -17,8 +12,13 @@ Sistema de telemetría con Arduino y visualización en tiempo real en Python
   <img src="https://img.shields.io/badge/Comunicación-Serie-informational">
 </p>
 
----
+## 👥 Equipo de trabajo
+- **Giulia Latorre Magliocco**
+- **Pau Arques Mas**
+- **Aina Sambró Gómez**
 
+---
+## VERSIÓN 1
 ## 📄 Descripción
 
 Proyecto que conecta un Arduino **controlador (satélite)** con un Arduino **estación de tierra** mediante comunicación serie.
@@ -29,7 +29,7 @@ El satélite mide **temperatura y humedad**, envía los datos en tiempo real y l
 
 ## 🎥 Video demostración
 
-👉 https://youtu.be/FFqj9oINtEE
+👉 https://youtu.be/FFqi9oINteE
 
 > Se recomienda visualizar el video para observar la transmisión y graficado en tiempo real.
 
@@ -46,18 +46,6 @@ El satélite mide **temperatura y humedad**, envía los datos en tiempo real y l
       ↓  USB
 [ Interfaz Python ]
 
-
-# Versión 1
-
-## 📋 Descripción
-<p align="justify">
-Proyecto que conecta un Arduino "controlador" (satélite) con un Arduino "estación de tierra".  
-El satélite mide temperatura y humedad y envía los datos por serie.  
-La estación de tierra los recibe y los muestra en una gráfica dinámica en una interfaz Python.
-</p>
-
-## 🧪 Video demostración
-https://youtu.be/FFqi9oINteE
 
 # Versión 2
 ## 📋 Descripción
