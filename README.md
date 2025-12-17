@@ -20,12 +20,22 @@ Sistema de telemetría con Arduino y visualización en tiempo real en Python
 ---
 
 <h2 align="center">VERSIÓN 1</h2>
-##📄 Descripción</h3>
-Proyecto que conecta un Arduino **controlador (satélite)** con un Arduino **estación de tierra** mediante comunicación serie.
 
-El satélite mide **temperatura y humedad**, envía los datos en tiempo real y la estación de tierra los recibe, procesa y muestra en una **gráfica dinámica desarrollada en Python**.
+<hr>
 
----
+<h3 align="center">📄 Descripción</h3>
+
+<p>
+Proyecto que conecta un Arduino <strong>controlador (satélite)</strong> con un Arduino
+<strong>estación de tierra</strong> mediante comunicación serie.
+</p>
+
+<p>
+El satélite mide <strong>temperatura y humedad</strong>, envía los datos en tiempo real y la
+estación de tierra los recibe, procesa y muestra en una
+<strong>gráfica dinámica desarrollada en Python</strong>.
+</p>
+
 
 ## 🎥 Video demostración
 
