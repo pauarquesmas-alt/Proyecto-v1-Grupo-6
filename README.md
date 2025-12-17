@@ -20,7 +20,7 @@ Sistema de telemetría con Arduino y visualización en tiempo real en Python
 
 ---
 
-<h2 align="center">VERSIÓN 1</h2>
+<h4 align="center">VERSIÓN 1</h4>
 
 <hr>
 
