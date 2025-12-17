@@ -178,6 +178,39 @@ Las novedades principales de la versión 3 son: un sistema de detección de erro
 <blockquote>
 Se recomienda visualizar el video para observar la transmisión y el graficado en tiempo real.
 </blockquote>
+
+## 🧠 Arquitectura del sistema
+
+```text
+[ Sensor DHT (Temperatura / Humedad) ] 
+                    ↓
+[ Sensor Ultrasonidos (Distancia) ] ──→ [ Servo-motor (Orientación) ]
+                    ↓
+             [ Arduino Satélite ]
+              - Adquisición de sensores
+              - Procesamiento básico
+              - Gestión de alarmas
+              - Sistema de posicionamiento
+              - Almacenamiento local de datos
+                    ↓   ↑
+        Comunicación Serie / LoRa (bidireccional)
+                    ↓   ↑
+       [ Arduino Estación de Tierra ]
+        - Recepción y reenvío de datos
+        - Detección de fallos de comunicación
+        - Gestión de interfaz física
+            ↓              ↓
+     [ Pantalla LCD ]   [ Botonera ]
+            ↓
+           USB
+            ↓
+        [ Interfaz Python (PC) ]
+         - Gráficas en tiempo real
+         - Visualización en mapas
+         - Alarmas
+         - Envío de órdenes al satélite
+         - Almacenamiento y recuperación de datos
+```
 <hr>
 
 
