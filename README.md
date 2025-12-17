@@ -3,10 +3,10 @@
 👥 Equipo de trabajo
 </span>
 
-
-- **Giulia Latorre Magliocco**  
-- **Pau Arques Mas**  
+- **Giulia Latorre Magliocco**
+- **Pau Arques Mas**
 - **Aina Sambró Gómez**
+
 
 
 # Versión 1
