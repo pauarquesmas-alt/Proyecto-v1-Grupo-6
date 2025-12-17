@@ -56,16 +56,24 @@ Se recomienda visualizar el video para observar la transmisión y el graficado e
 [ Arduino Estación de Tierra ]
       ↓  USB
 [ Interfaz Python ]
+```
 
+<h2 align="center">VERSIÓN 2</h2>
 
-# Versión 2
-## 📋 Descripción
-<p align="justify">
+<h2>📄 Descripción</h2>
+
+<p>
 El proyecto implementa una estación de tierra conectada a un “satélite” Arduino que mide temperatura, humedad y distancia con ultrasonidos. Desde el ordenador, una interfaz en Python muestra en tiempo real las gráficas de T/H y la media móvil, controla el periodo de envío de datos y el movimiento del servo, dibuja un radar con la distancia detectada y lanza alarmas cuando las medias de temperatura superan un umbral o se detectan fallos en los sensores.
 </p>
 
-## 🧪 Video demostración
-https://youtu.be/GcaQ2BR3xfE?si=nUMKSqZa3t8V-v8U
+<h2>🎥 Video demostración</h2>
+
+👉 https://youtu.be/GcaQ2BR3xfE?si=nUMKSqZa3t8V-v8U
+
+<blockquote>
+Se recomienda visualizar el video para observar la transmisión y el graficado en tiempo real.
+</blockquote>
+
 
 # Versión 3
 ## 📋 Descripción
