@@ -4,6 +4,48 @@
 - **Pau Arques Mas**
 - **Aina Sambró Gómez**
 
+<h1 align="center">🛰️ Estación Satélite Arduino</h1>
+
+<p align="center">
+Sistema de telemetría con Arduino y visualización en tiempo real en Python
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Estado-Activo-success">
+  <img src="https://img.shields.io/badge/Arduino-UNO-blue">
+  <img src="https://img.shields.io/badge/Python-3.10-yellow">
+  <img src="https://img.shields.io/badge/Comunicación-Serie-informational">
+</p>
+
+---
+
+## 📄 Descripción
+
+Proyecto que conecta un Arduino **controlador (satélite)** con un Arduino **estación de tierra** mediante comunicación serie.
+
+El satélite mide **temperatura y humedad**, envía los datos en tiempo real y la estación de tierra los recibe, procesa y muestra en una **gráfica dinámica desarrollada en Python**.
+
+---
+
+## 🎥 Video demostración
+
+👉 https://youtu.be/FFqj9oINtEE
+
+> Se recomienda visualizar el video para observar la transmisión y graficado en tiempo real.
+
+---
+
+## 🧠 Arquitectura del sistema
+
+```text
+[ Sensor DHT ]
+      ↓
+[ Arduino Satélite ]
+      ↓  Comunicación Serie
+[ Arduino Estación de Tierra ]
+      ↓  USB
+[ Interfaz Python ]
+
 
 # Versión 1
 
