@@ -109,7 +109,7 @@ Las novedades principales de la versión 3 son: un sistema de detección de erro
 👉 https://youtu.be/kKIEUvKRv5c
 
 <blockquote>
-Se recomienda visualizar el video para observar la transmisión y el graficado en tiempo real.
+Se recomienda visualizar el vídeo para observar la transmisión de datos de sensores y de posicionamiento, su visualización en tiempo real, el almacenamiento y recuperación de información, y la representación de la posición del satélite sobre mapas desde la estación de tierra.
 </blockquote>
 <hr>
 
